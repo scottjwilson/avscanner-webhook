@@ -24,7 +24,6 @@ app.listen(PORT, () => console.log(`Listening on port ${PORT}`));
 var received_updates = [];
 
 app.get("/", function (req, res) {
-  console.log(req);
   res.send("<pre>" + JSON.stringify(received_updates, null, 2) + "</pre>");
 });
 
@@ -52,10 +51,10 @@ app.get("/webhook", (req, res) => {
 
 // POST route to handle webhook calls.
 app.post("/webhook", async function (req, res) {
-  const entry = req.body.entry[0].changes[0].value;
+  // const entry = req.body.entry[0].changes[0].value;
   //   const { post_id, created_time, message } = entry;
   try {
-    console.log(entry);
+    console.log(req.body);
     // const { data, postsError: error } = await supabase
     //   .from("posts")
     //   .insert([{ created_at: entry.created_time, message: entry.message }]);
