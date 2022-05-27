@@ -55,11 +55,11 @@ app.post("/webhook", async function (req, res) {
   const entry = req.body.entry[0].changes[0].value;
   //   const { post_id, created_time, message } = entry;
   try {
-    // console.log(entry);
-    const { data, postsError: error } = await supabase
-      .from("posts")
-      .insert([{ created_at: entry.created_time, message: entry.message }]);
-    console.log("from supabase", data);
+    console.log(entry);
+    // const { data, postsError: error } = await supabase
+    //   .from("posts")
+    //   .insert([{ created_at: entry.created_time, message: entry.message }]);
+    // console.log("from supabase", data);
   } catch (error) {
     console.error(error);
     console.log(postsError);
