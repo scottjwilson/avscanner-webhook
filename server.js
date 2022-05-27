@@ -1,8 +1,18 @@
 const app = require("express")();
 const xhub = require("express-x-hub");
 
+require("dotenv").config();
+
+// Import Supabase Client
+const { createClient } = require("@supabase/supabase-js");
+
+const supabaseUrl = process.env.SUPABASE_URL;
+const supabaseKey = process.env.SUPABASE_KEY;
+const supabase = createClient(supabaseUrl, supabaseKey);
+
 // express middleware
 const bodyParser = require("body-parser");
+
 app.use(xhub({ algorithm: "sha1", secret: process.env.APP_SECRET }));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
@@ -20,7 +30,6 @@ app.get("/", function (req, res) {
 
 // GET route to register the callback URL with Facebook.
 app.get("/webhook", (req, res) => {
-  console.log(req);
   const VERIFY_TOKEN = "random string";
   // Parse the query params
   const mode = req.query["hub.mode"];
@@ -42,12 +51,17 @@ app.get("/webhook", (req, res) => {
 });
 
 // POST route to handle webhook calls.
-app.post("/webhook", (req, res) => {
-  const entry = req.body.entry;
+app.post("/webhook", async function (req, res) {
+  const entry = req.body.entry[0].changes[0].value;
   //   const { post_id, created_time, message } = entry;
   try {
-    console.log(entry);
+    // console.log(entry);
+    const { data, postsError: error } = await supabase
+      .from("posts")
+      .insert([{ created_at: entry.created_time, message: entry.message }]);
+    console.log("from supabase", data);
   } catch (error) {
     console.error(error);
+    console.log(postsError);
   }
 });
