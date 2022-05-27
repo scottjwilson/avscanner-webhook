@@ -7,7 +7,7 @@ app.use(xhub({ algorithm: "sha1", secret: process.env.APP_SECRET }));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 // start server
 app.listen(PORT, () => console.log(`Listening on port ${PORT}`));
 
