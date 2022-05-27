@@ -51,10 +51,11 @@ app.get("/webhook", (req, res) => {
 
 // POST route to handle webhook calls.
 app.post("/webhook", async function (req, res) {
-  // const entry = req.body.entry[0].changes[0].value;
+  const entry = req.body.entry[0].changes[0].value;
   //   const { post_id, created_time, message } = entry;
   try {
     console.log(req.body);
+    console.log(entry);
     // const { data, postsError: error } = await supabase
     //   .from("posts")
     //   .insert([{ created_at: entry.created_time, message: entry.message }]);
