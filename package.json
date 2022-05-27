@@ -1,0 +1,19 @@
+{
+  "name": "avscanner-webhook",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon server.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@supabase/supabase-js": "^1.35.3",
+    "express": "^4.18.1",
+    "express-x-hub": "^1.0.4"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.16"
+  }
+}
