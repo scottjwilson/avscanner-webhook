@@ -43,12 +43,10 @@ app.get("/webhook", (req, res) => {
 
 // POST route to handle webhook calls.
 app.post("/webhook", (req, res) => {
-  const entry = req.body.entry[0].changes[0].value;
-  const { post_id, created_time, message } = entry;
+  const entry = req.body.entry;
+  //   const { post_id, created_time, message } = entry;
   try {
-    console.log(req.body);
-
-    console.log(message);
+    console.log(entry);
   } catch (error) {
     console.error(error);
   }
