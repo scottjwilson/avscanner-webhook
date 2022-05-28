@@ -53,21 +53,27 @@ app.get("/webhook", (req, res) => {
 app.post("/webhook", async function (req, res) {
   const entry = req.body.entry[0].changes[0].value;
   //   const { post_id, created_time, message } = entry;
+  console.log("from facebook", entry);
   try {
     // console.log(req.body);
-    console.log(entry);
-    const { data, postsError: error } = await supabase.from("posts").insert([
+    const { data, error } = await supabase.from("posts").insert([
       {
         post_id: entry.post_id,
         created_at: entry.created_time,
         message: entry.message,
       },
     ]);
-    console.log("from supabase", data);
-    res.sendStatus(200);
+
+    if (data) {
+      console.log("supabase", data);
+    }
+
+    if (error) {
+      console.log("supabase error", error);
+    }
+
+    res.status(200).end();
   } catch (error) {
     console.error(error);
-    console.log(postsError);
-    res.sendStatus(404);
   }
 });
