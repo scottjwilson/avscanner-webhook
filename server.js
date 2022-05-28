@@ -56,12 +56,18 @@ app.post("/webhook", async function (req, res) {
   try {
     // console.log(req.body);
     console.log(entry);
-    // const { data, postsError: error } = await supabase
-    //   .from("posts")
-    //   .insert([{ created_at: entry.created_time, message: entry.message }]);
-    // console.log("from supabase", data);
+    const { data, postsError: error } = await supabase.from("posts").insert([
+      {
+        post_id: entry.post_id,
+        created_at: entry.created_time,
+        message: entry.message,
+      },
+    ]);
+    console.log("from supabase", data);
+    res.sendStatus(200);
   } catch (error) {
     console.error(error);
     console.log(postsError);
+    res.sendStatus(404);
   }
 });
