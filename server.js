@@ -51,16 +51,17 @@ app.get("/webhook", (req, res) => {
 
 // POST route to handle webhook calls.
 app.post("/webhook", async function (req, res) {
-  const entry = req.body.entry[0].changes[0].value;
+  const entry = req.body.entry;
   //   const { post_id, created_time, message } = entry;
   console.log("from facebook", entry);
   try {
     // console.log(req.body);
     const { data, error } = await supabase.from("posts").insert([
       {
-        post_id: entry.post_id,
-        created_at: entry.created_time,
-        message: entry.message,
+        // post_id: entry.post_id,
+        // created_at: entry.created_time,
+        message: "new live post",
+        // message: entry.message,
       },
     ]);
 
