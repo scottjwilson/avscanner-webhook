@@ -65,14 +65,6 @@ app.post("/webhook", async function (req, res) {
       },
     ]);
 
-    if (data) {
-      console.log("supabase", data);
-    }
-
-    if (error) {
-      console.log("supabase error", error);
-    }
-
     res.status(200).end();
   } catch (error) {
     console.error(error);
