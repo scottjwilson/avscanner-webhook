@@ -1,17 +1,11 @@
-const app = require("express")();
-const xhub = require("express-x-hub");
-
-require("dotenv").config();
-
-// Import Supabase Client
+let app = require("express")();
+let xhub = require("express-x-hub");
+let bodyParser = require("body-parser");
 const { createClient } = require("@supabase/supabase-js");
-
 const supabaseUrl = process.env.SUPABASE_URL;
 const supabaseKey = process.env.SUPABASE_KEY;
 const supabase = createClient(supabaseUrl, supabaseKey);
-
-// express middleware
-const bodyParser = require("body-parser");
+require("dotenv").config();
 
 app.use(xhub({ algorithm: "sha1", secret: process.env.APP_SECRET }));
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -60,6 +54,21 @@ app.post("/facebook", async function (req, res) {
   }
 
   console.log("request header X-Hub-Signature validated");
+  try {
+    // console.log(req.body);
+    const { data, error } = await supabase.from("posts").insert([
+      {
+        // post_id: entry.post_id,
+        // created_at: entry.created_time,
+        message: "new live post",
+        // message: entry.message,
+      },
+    ]);
+
+    res.status(200).end();
+  } catch (error) {
+    console.error(error);
+  }
   // Process the Facebook updates here
   received_updates.unshift(req.body);
 });
