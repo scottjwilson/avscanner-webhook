@@ -21,14 +21,14 @@ const PORT = process.env.PORT || 3000;
 // start server
 app.listen(PORT, () => console.log(`Listening on port ${PORT}`));
 
-var received_updates = [];
+let received_updates = [];
 
 app.get("/", function (req, res) {
   res.send("<pre>" + JSON.stringify(received_updates, null, 2) + "</pre>");
 });
 
 // GET route to register the callback URL with Facebook.
-app.get("/webhook", (req, res) => {
+app.get("/facebook", (req, res) => {
   const VERIFY_TOKEN = "random string";
   // Parse the query params
   const mode = req.query["hub.mode"];
@@ -50,23 +50,16 @@ app.get("/webhook", (req, res) => {
 });
 
 // POST route to handle webhook calls.
-app.post("/webhook", async function (req, res) {
-  const entry = req.body.entry;
-  //   const { post_id, created_time, message } = entry;
-  console.log("from facebook", entry);
-  try {
-    // console.log(req.body);
-    const { data, error } = await supabase.from("posts").insert([
-      {
-        // post_id: entry.post_id,
-        // created_at: entry.created_time,
-        message: "new live post",
-        // message: entry.message,
-      },
-    ]);
-
-    res.status(200).end();
-  } catch (error) {
-    console.error(error);
+app.post("/facebook", async function (req, res) {
+  if (!req.isXHubValid()) {
+    console.log(
+      "Warning - request header X-Hub-Signature not present or invalid"
+    );
+    res.sendStatus(401);
+    return;
   }
+
+  console.log("request header X-Hub-Signature validated");
+  // Process the Facebook updates here
+  received_updates.unshift(req.body);
 });
